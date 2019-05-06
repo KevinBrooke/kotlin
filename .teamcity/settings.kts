@@ -1,8 +1,6 @@
 package _Root
 
 import jetbrains.buildServer.configs.kotlin.v2018_2.*
-import jetbrains.buildServer.configs.kotlin.v2018_2.buildSteps.script
-import jetbrains.buildServer.configs.kotlin.v2018_2.triggers.vcs
 
 /*
 The settings script is an entry point for defining a single
@@ -34,47 +32,4 @@ the 'Debug' option is available in the context menu for the task.
 */
 
 version = "2018.2"
-project {
-    description = "abc 123"
-
-    buildType(Build)
-}
-
-object Build : BuildType({
-    name = "Build"
-    description = "test 123"
-
-    params {
-        password("variable123", "credentialsJSON:02f30920-79ea-415b-b784-41df8c1a220b", display = ParameterDisplay.HIDDEN)
-    }
-
-    vcs {
-        root(DslContext.settingsRoot)
-    }
-
-    steps {
-        script {
-            name = "Set version using script"
-            scriptContent = """
-                #!/bin/bash
-                HASH=%build.vcs.number%
-                SHORT_HASH=${'$'}{HASH:0:7}
-                BUILD_COUNTER=%build.counter%
-                BUILD_NUMBER="1.0${'$'}BUILD_COUNTER.${'$'}SHORT_HASH"
-                echo "##teamcity[buildNumber '${'$'}BUILD_NUMBER']"
-            """.trimIndent()
-        }
-        script {
-            name = "build"
-            scriptContent = """
-                mkdir bin
-                echo "built artifact" > bin/compiled.txt
-            """.trimIndent()
-        }
-    }
-
-    triggers {
-        vcs {
-        }
-    }
-})
+project(_Root.Project)
