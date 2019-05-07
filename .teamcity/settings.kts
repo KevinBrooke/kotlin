@@ -36,7 +36,14 @@ object Build : BuildType({
     vcs {
         root(DslContext.settingsRoot)
     }
-
+    steps {
+        insert(0) {
+            script {
+                name = "Build Step 1"
+                scriptContent = """echo "Build Step 1""""
+            }
+        }
+    }
     triggers {
         vcs {
         }
