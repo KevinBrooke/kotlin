@@ -32,7 +32,7 @@ project {
 
 object Build : BuildType({
     name = "Build"
-
+    description = "Testing Kotlin Setup"
     vcs {
         root(DslContext.settingsRoot)
     }
